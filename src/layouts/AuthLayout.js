@@ -33,7 +33,6 @@ export default function AuthLayout({ children }) {
   return (
     <HeaderStyle>
       <Logo />
-
       <Typography
         variant="body2"
         sx={{

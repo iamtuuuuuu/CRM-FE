@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -14,6 +14,7 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 //
 import sidebarConfig from './SidebarConfig';
+import employeeApi from 'src/apis/employee.api';
 
 // ----------------------------------------------------------------------
 
@@ -43,8 +44,21 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
+  const [user, setUser] = useState()
 
   const isDesktop = useResponsive('up', 'lg');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await employeeApi.getMe()
+        setUser(res)
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchUser()
+  }, [])
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -70,11 +84,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
             <Avatar src={account.photoURL} alt="photoURL" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {user?.name.toUpperCase()}
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
-              </Typography>
+              {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {user?.email}
+              </Typography> */}
             </Box>
           </AccountStyle>
         </Link>
@@ -90,28 +104,28 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           spacing={3}
           sx={{ pt: 5, borderRadius: 2, position: 'relative' }}
         >
-          <Box
+          {/* <Box
             component="img"
             src="/static/illustrations/illustration_avatar.png"
             sx={{ width: 100, position: 'absolute', top: -50 }}
-          />
+          /> */}
 
-          <Box sx={{ textAlign: 'center' }}>
+          {/* <Box sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h6">
               Get more?
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               From only $69
             </Typography>
-          </Box>
+          </Box> */}
 
-          <Button
+          {/* <Button
             href="https://material-ui.com/store/items/minimal-dashboard/"
             target="_blank"
             variant="contained"
           >
             Upgrade to Pro
-          </Button>
+          </Button> */}
         </Stack>
       </Box>
     </Scrollbar>
